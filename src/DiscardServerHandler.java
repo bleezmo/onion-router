@@ -27,8 +27,7 @@ public class DiscardServerHandler extends SimpleChannelHandler{
 		e.getChannel().write(buf).addListener(new ChannelFutureListener(){
 			@Override
 			public void operationComplete(ChannelFuture cf) throws Exception {
-				System.out.println("closing channel");
-				cf.getChannel().close();
+
 			}
 		});
 	}
