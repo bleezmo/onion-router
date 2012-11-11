@@ -9,23 +9,25 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.ChannelGroupFuture;
+import org.jboss.netty.channel.group.ChannelGroupFutureListener;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 
 public class OnionRouter {
-    static final ChannelGroup allChannels = new DefaultChannelGroup("time-server");
+    private static final ChannelGroup allChannels = new DefaultChannelGroup("time-server");
+    private static ChannelFactory factory;
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
+		factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory(){
 			@Override
 			public ChannelPipeline getPipeline(){
 				return Channels.pipeline(
-						new TimeDecoder(), 
+						new TimeServerHandler.ShutdownDecoder(), 
 						new TimeServerHandler());
 			}
 		});
@@ -33,10 +35,16 @@ public class OnionRouter {
 		bootstrap.setOption("child.keepAlive", true);
 		Channel ch = bootstrap.bind(new InetSocketAddress(8080));
 		allChannels.add(ch);
-		//wait for shutdown command. probably infinite loop which checks for interrupt flag set
+	}
+	public static final void close(){
 		ChannelGroupFuture future = allChannels.close();
 		future.awaitUninterruptibly();
-		factory.releaseExternalResources();
+		future.addListener(new ChannelGroupFutureListener(){
+			@Override
+			public void operationComplete(ChannelGroupFuture future)
+					throws Exception {
+				factory.releaseExternalResources();	
+			}
+		});
 	}
-	
 }
