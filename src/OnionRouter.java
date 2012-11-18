@@ -16,12 +16,12 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 public class OnionRouter {
     private static final ChannelGroup allChannels = new DefaultChannelGroup("time-server");
-    private static ChannelFactory factory;
-	/**
+	private static volatile boolean doShutdown = false;
+    /**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
+		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory(){
 			@Override
@@ -35,15 +35,20 @@ public class OnionRouter {
 		bootstrap.setOption("child.keepAlive", true);
 		Channel ch = bootstrap.bind(new InetSocketAddress(8080));
 		allChannels.add(ch);
+		while(!doShutdown){
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {}
+		}
+		factory.releaseExternalResources();
 	}
 	public static final void close(){
 		ChannelGroupFuture future = allChannels.close();
-		future.awaitUninterruptibly();
 		future.addListener(new ChannelGroupFutureListener(){
 			@Override
 			public void operationComplete(ChannelGroupFuture future)
 					throws Exception {
-				factory.releaseExternalResources();	
+				doShutdown = true;
 			}
 		});
 	}

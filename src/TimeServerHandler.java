@@ -18,15 +18,7 @@ public class TimeServerHandler extends SimpleChannelHandler{
 		Channel ch = e.getChannel();
 		ChannelBuffer time = ChannelBuffers.buffer(4);
 		time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
-		
-		ChannelFuture f = ch.write(time);
-		
-		f.addListener(new ChannelFutureListener(){
-			public void operationComplete(ChannelFuture future){
-				Channel ch = future.getChannel();
-				ch.close();
-			}
-		});
+		ch.write(time);
 	}
 	
 	@Override
@@ -43,16 +35,21 @@ public class TimeServerHandler extends SimpleChannelHandler{
 	}
 	
 	public static class ShutdownDecoder extends FrameDecoder{
-
+		private int incr = 0;
+		private char[] chars = new char[4];
 		@Override
 		protected Object decode(ChannelHandlerContext ctx, Channel ch,
 				ChannelBuffer buffer) throws Exception {
-			
-			if(buffer.readableBytes() < 4) return null;
-			else{
-				byte[] barray = new byte[4];
-				buffer.readBytes(barray);
-				return new String(barray);
+			while(buffer.readable()){
+				char c = (char) buffer.readByte();
+				System.out.print(c);
+				chars[incr] = c;
+				incr++;
+			}
+			if(incr < 4) return null;
+			else {
+				System.out.print("\n");
+				return new String(chars);
 			}
 		}
 		
