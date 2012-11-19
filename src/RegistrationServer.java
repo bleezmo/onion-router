@@ -21,7 +21,7 @@ public class RegistrationServer {
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory(){
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline();
+				return Channels.pipeline(new RegistrationServerHandler());
 			}
 		});
 		bootstrap.setOption("child.tcpNoDelay", true);
