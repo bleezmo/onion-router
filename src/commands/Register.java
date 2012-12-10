@@ -8,7 +8,7 @@ public class Register extends ORCommand{
 
 	@Override
 	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer){
-		
+		done();
 	}
 	
 }

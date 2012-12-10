@@ -34,10 +34,10 @@ public class ORCommands{
 				RegisterSuccess rs = new RegisterSuccess();
 				return rs.decode(ctx, ch, buffer);
 			}else if(command == ORCommands.PROBE){
-				Probe probe = new Probe();
+				NewCircuit probe = new NewCircuit();
 				return probe.decode(ctx, ch, buffer);
 			}else if(command == ORCommands.PROBE_ACK){
-				ProbeAck pa = new ProbeAck();
+				NewCircuitAck pa = new NewCircuitAck();
 				return pa.decode(ctx, ch, buffer);
 			}else if(command == ORCommands.SEND){
 				Send send = new Send();
