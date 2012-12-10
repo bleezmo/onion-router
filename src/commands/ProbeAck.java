@@ -1,24 +1,14 @@
 package commands;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
 
 public class ProbeAck extends ORCommand{
 
 	@Override
-	public byte getCommand() {
-		return ORCommands.PROBE_ACK;
-	}
-
-	@Override
-	protected void decode(ChannelBuffer buffer) {
-		// TODO Auto-generated method stub
+	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer){
 		
-	}
-
-	@Override
-	public ChannelBuffer getResult() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

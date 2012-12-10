@@ -1,9 +1,12 @@
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -12,35 +15,41 @@ import org.jboss.netty.channel.group.ChannelGroupFuture;
 import org.jboss.netty.channel.group.ChannelGroupFutureListener;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.handler.codec.frame.FrameDecoder;
+
+import commands.ORCommands;
 
 
 public class OnionRouter {
-    private static final ChannelGroup allChannels = new DefaultChannelGroup("time-server");
+    private static final ChannelGroup allChannels = new DefaultChannelGroup("onion-router");
 	private static volatile boolean doShutdown = false;
+	private static volatile ChannelFactory serverFactory;
+	private static volatile ChannelFactory clientFactory;
     /**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
-		ServerBootstrap bootstrap = new ServerBootstrap(factory);
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory(){
+		Executor executor = Executors.newCachedThreadPool();
+		serverFactory = new NioServerSocketChannelFactory(executor,executor);
+		clientFactory = new NioServerSocketChannelFactory(executor,executor);
+		ServerBootstrap sb = new ServerBootstrap(serverFactory);
+		sb.setPipelineFactory(new ChannelPipelineFactory(){
 			@Override
 			public ChannelPipeline getPipeline(){
 				return Channels.pipeline(
-						new TimeServerHandler.ShutdownDecoder(), 
-						new TimeServerHandler());
+						new FrameDecoder(){
+							@Override
+							protected Object decode(ChannelHandlerContext ctx,Channel ch, ChannelBuffer buffer)throws Exception {
+								return ORCommands.decode(ctx, ch, buffer);
+							}
+						}
+						);
 			}
 		});
-		bootstrap.setOption("child.tcpNoDelay", true);
-		bootstrap.setOption("child.keepAlive", true);
-		Channel ch = bootstrap.bind(new InetSocketAddress(8080));
+		sb.setOption("child.tcpNoDelay", true);
+		sb.setOption("child.keepAlive", true);
+		Channel ch = sb.bind(new InetSocketAddress(8080));
 		allChannels.add(ch);
-		while(!doShutdown){
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
-		}
-		factory.releaseExternalResources();
 	}
 	public static final void close(){
 		ChannelGroupFuture future = allChannels.close();
@@ -51,5 +60,9 @@ public class OnionRouter {
 				doShutdown = true;
 			}
 		});
+		serverFactory.releaseExternalResources();
+	}
+	public static ChannelFactory getClientFactory() {
+		return clientFactory;
 	}
 }

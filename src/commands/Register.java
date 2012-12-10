@@ -1,23 +1,14 @@
 package commands;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
 
 public class Register extends ORCommand{
 
 	@Override
-	public byte getCommand() {
-		return ORCommands.REGISTER;
-	}
-
-	@Override
-	protected void decode(ChannelBuffer buffer) {
+	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer){
 		
-	}
-
-	@Override
-	public ChannelBuffer getResult() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }
