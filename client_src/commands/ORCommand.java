@@ -26,10 +26,13 @@ public abstract class ORCommand extends FrameDecoder{
 	 * @param arg2
 	 */
 	protected abstract void ORDecode(ChannelHandlerContext arg0, Channel arg1, ChannelBuffer arg2);
+	/**
+	 * must be called when the ORCommand is done decoding the message
+	 */
 	protected final void done(){
 		finished = true;
 	}
-	protected void setError(String error){
+	protected final void setError(String error){
 		this.error = error;
 	}
 	public String getError(){

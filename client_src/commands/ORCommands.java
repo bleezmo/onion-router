@@ -19,10 +19,12 @@ public class ORCommands{
 	public static final byte ERROR = 0;
 	public static final byte REGISTER = 1;
 	public static final byte REGISTER_SUCCESS = 2;
-	public static final byte PROBE = 3;
-	public static final byte PROBE_ACK = 4;
+	public static final byte 	NEW_CIRCUIT = 3;
+	public static final byte NEW_CIRCUIT_ACK = 4;
 	public static final byte SEND = 5;
 	public static final byte SEND_ACK = 6;
+	public static final byte EXTEND_CIRCUIT = 7;
+	public static final byte EXTEND_CIRCUIT_ACK = 8;
 	
 	public static final Object decode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer) throws Exception{
 		if(buffer.readable()){
@@ -33,10 +35,10 @@ public class ORCommands{
 			}else if(command == ORCommands.REGISTER_SUCCESS){
 				RegisterSuccess rs = new RegisterSuccess();
 				return rs.decode(ctx, ch, buffer);
-			}else if(command == ORCommands.PROBE){
+			}else if(command == ORCommands.NEW_CIRCUIT){
 				NewCircuit probe = new NewCircuit();
 				return probe.decode(ctx, ch, buffer);
-			}else if(command == ORCommands.PROBE_ACK){
+			}else if(command == ORCommands.NEW_CIRCUIT_ACK){
 				NewCircuitAck pa = new NewCircuitAck();
 				return pa.decode(ctx, ch, buffer);
 			}else if(command == ORCommands.SEND){
@@ -45,6 +47,10 @@ public class ORCommands{
 			}else if(command == ORCommands.SEND_ACK){
 				SendAck sa = new SendAck();
 				return sa.decode(ctx, ch, buffer);
+			}else if(command == ORCommands.EXTEND_CIRCUIT){
+				return new ExtendCircuit().decode(ctx, ch, buffer);
+			}else if(command == ORCommands.EXTEND_CIRCUIT_ACK){
+				return new ExtendCircuitAck().decode(ctx, ch, buffer);
 			}else{
 				//TODO add error response here
 				throw new RuntimeException();

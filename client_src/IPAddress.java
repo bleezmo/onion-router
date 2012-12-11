@@ -1,4 +1,5 @@
 
+
 public class IPAddress {
 	public static final int newIP(byte octet1, byte octet2, byte octet3, byte octet4){
 		int ip = octet1;
