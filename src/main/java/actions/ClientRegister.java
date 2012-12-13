@@ -52,7 +52,17 @@ public class ClientRegister {
 				r.setServerPort(GlobalVars.serverPort);
 				r.setNodeName(GlobalVars.getNodeName());
 				Channel ch = e.getChannel();
-				ch.write(r);
+				Log.i("connected. sending register");
+				ch.write(r).addListener(new ChannelFutureListener(){
+
+					@Override
+					public void operationComplete(ChannelFuture arg0)
+							throws Exception {
+						Log.i("done sending register");
+						
+					}
+					
+				});
 			}
 			
 		}));

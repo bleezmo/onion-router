@@ -20,7 +20,7 @@ public class GlobalVars {
 		if(System.getenv("PORT") != null){
 			return Integer.valueOf(System.getenv("PORT"));
 		}else{
-			return 8080;
+			return 80;
 		}
 	}
 	public static final int serverPort = 8081;
