@@ -1,4 +1,4 @@
-package client_src;
+package main.java.client_src;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;

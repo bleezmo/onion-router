@@ -1,9 +1,10 @@
-package directory_src;
+package main.java.directory_src;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
-import globals.NodeList;
+import main.java.globals.GlobalVars;
+import main.java.globals.NodeList;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -16,11 +17,11 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import utils.Log;
+import main.java.utils.Log;
 
-import commands.ORCommand;
-import commands.Register;
-import commands.RegisterSuccess;
+import main.java.commands.ORCommand;
+import main.java.commands.Register;
+import main.java.commands.RegisterSuccess;
 
 public class DirectoryHandler extends SimpleChannelHandler{
 
@@ -32,7 +33,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 				final Register r = (Register) orc;
 				final Channel ch = e.getChannel();
 				RegisterSuccess rs = new RegisterSuccess();
-				ArrayList<InetSocketAddress> nodeList = NodeList.getAll();
+				ArrayList<NodeList.Node> nodeList = NodeList.getAll();
 				rs.setNodeList(nodeList);
 				byte[] data= rs.encode();
 				ChannelBuffer cb = ChannelBuffers.buffer(data.length);
@@ -41,7 +42,8 @@ public class DirectoryHandler extends SimpleChannelHandler{
 					@Override
 					public void operationComplete(ChannelFuture cf) throws Exception {
 						InetSocketAddress sa = (InetSocketAddress) ch.getRemoteAddress();
-						NodeList.add(new InetSocketAddress(sa.getAddress(), r.getServerPort())); //use the server port given
+						Log.db("adding node: "+r.getNodeName()+" "+sa.getHostName()+" "+r.getServerPort());
+						NodeList.add(r.getNodeName(), new InetSocketAddress(sa.getAddress(), r.getServerPort())); //use the server port given
 						ch.close();
 					}
 				});

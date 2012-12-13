@@ -1,6 +1,7 @@
-package client_src;
+package main.java.client_src;
 
-import globals.GlobalVars;
+import main.java.globals.DbManager;
+import main.java.globals.GlobalVars;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
@@ -24,12 +25,12 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import actions.ClientRegister;
+import main.java.actions.ClientRegister;
 
-import utils.ORPipelineFactory;
+import main.java.utils.ORPipelineFactory;
 
-import commands.ORCommand;
-import commands.ORCoder;
+import main.java.commands.ORCommand;
+import main.java.commands.ORCoder;
 
 
 public class OnionRouter {
@@ -39,6 +40,12 @@ public class OnionRouter {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		DbManager.get();
+		if(args != null && args.length > 0){
+			GlobalVars.setNodeName(args[0]);
+		}else{
+			GlobalVars.setNodeName("anonymous");
+		}
 		Executor executor = Executors.newCachedThreadPool();
 		ChannelFactory serverFactory = new NioServerSocketChannelFactory(executor,executor);
 		ChannelFactory terminalFactory = new NioServerSocketChannelFactory(executor,executor);

@@ -1,26 +1,25 @@
-package commands;
+package main.java.commands;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 
-
-public class SendAck extends ORCommand{
-
-	@Override
-	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer){
-		
-	}
+public class Unknown extends ORCommand{
 
 	@Override
 	public byte[] encode() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public byte getCommandType() {
-		return CommandType.SEND_ACK;
+		return CommandType.UNKNOWN;
 	}
-	
+
+	@Override
+	protected void ORDecode(ChannelHandlerContext arg0, Channel arg1,
+			ChannelBuffer arg2) {
+		done();
+	}
+
 }

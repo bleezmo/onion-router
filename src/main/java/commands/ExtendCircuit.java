@@ -1,4 +1,4 @@
-package commands;
+package main.java.commands;
 
 import java.util.UUID;
 
@@ -8,22 +8,23 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 
 
 /**
- * all NEW_CIRCUIT commands have the same format
- * ***************************
+ * the EXTEND_CIRCUIT command format is as follows:
+ * **************
  * | circuit id |
  * | ---------- |
  * | 16 bytes   |
- * ***************************
+ * **************
  * @author josh
  *
  */
-public class NewCircuit extends ORCommand{
+public class ExtendCircuit extends ORCommand{
 	private UUID circuitId;
 	
 	public UUID getCircuitId() {
 		return circuitId;
 	}
-	public void setCircuitId(UUID circuitId){
+	
+	public void setCircuitId(UUID circuitId) {
 		if(openWrite()){
 			this.circuitId = circuitId;
 		}
@@ -44,9 +45,10 @@ public class NewCircuit extends ORCommand{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public byte getCommandType() {
-		return CommandType.NEW_CIRCUIT;
+		return CommandType.EXTEND_CIRCUIT;
 	}
-	
+
 }

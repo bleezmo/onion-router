@@ -1,5 +1,6 @@
-package directory_src;
-import globals.GlobalVars;
+package main.java.directory_src;
+import main.java.globals.DbManager;
+import main.java.globals.GlobalVars;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -17,11 +18,11 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import utils.ORPipelineFactory;
+import main.java.utils.ORPipelineFactory;
 
-import commands.ORCommand;
-import commands.ORCoder;
-import commands.Register;
+import main.java.commands.ORCommand;
+import main.java.commands.ORCoder;
+import main.java.commands.Register;
 
 
 public class ORDirectory {
@@ -30,6 +31,8 @@ public class ORDirectory {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		DbManager.get();
+		GlobalVars.setNodeName("directory");
 		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ORPipelineFactory(new DirectoryHandler()));

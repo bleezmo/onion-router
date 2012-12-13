@@ -1,4 +1,4 @@
-package commands;
+package main.java.commands;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -10,7 +10,6 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import utils.Log;
 public class ORCoder{
 	public static class ORDecoder extends FrameDecoder{
 		@Override

@@ -1,11 +1,11 @@
-package commands;
+package main.java.commands;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import utils.Log;
+import main.java.utils.Log;
 
 public abstract class ORCommand extends FrameDecoder{
 	private boolean finished = false;
@@ -55,5 +55,9 @@ public abstract class ORCommand extends FrameDecoder{
 	public boolean isOk(){
 		if(error != null) return false;
 		else return true;
+	}
+	@Override
+	public String toString(){
+		return Integer.toString(getCommandType());
 	}
 }

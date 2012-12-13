@@ -1,11 +1,11 @@
-package utils;
+package main.java.utils;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import commands.ORCoder;
+import main.java.commands.ORCoder;
 
 public class ORPipelineFactory implements ChannelPipelineFactory{
 	private final SimpleChannelHandler handler;

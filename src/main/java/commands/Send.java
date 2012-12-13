@@ -1,4 +1,4 @@
-package commands;
+package main.java.commands;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -8,8 +8,6 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 
-
-import utils.Log;
 
 /**
  * all SEND commands have the following format in common

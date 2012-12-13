@@ -1,7 +1,7 @@
-package actions;
+package main.java.actions;
 
-import globals.GlobalVars;
-import globals.NodeList;
+import main.java.globals.GlobalVars;
+import main.java.globals.NodeList;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -18,12 +18,12 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
-import commands.ORCommand;
-import commands.Register;
-import commands.RegisterSuccess;
+import main.java.commands.ORCommand;
+import main.java.commands.Register;
+import main.java.commands.RegisterSuccess;
 
-import utils.Log;
-import utils.ORPipelineFactory;
+import main.java.utils.Log;
+import main.java.utils.ORPipelineFactory;
 
 public class ClientRegister {
 	public static final void run(){
@@ -37,6 +37,7 @@ public class ClientRegister {
 					if(command instanceof RegisterSuccess){
 						RegisterSuccess rs = (RegisterSuccess) command;
 						NodeList.addAll(rs.getNodeList());
+						Log.db("received node list "+rs.toString());
 					}else{
 						Log.f("received the wrong command: "+command.getCommandType());
 					}
@@ -49,6 +50,7 @@ public class ClientRegister {
 					ChannelStateEvent e) throws Exception {
 				Register r = new Register();
 				r.setServerPort(GlobalVars.serverPort);
+				r.setNodeName(GlobalVars.getNodeName());
 				Channel ch = e.getChannel();
 				ch.write(r);
 			}

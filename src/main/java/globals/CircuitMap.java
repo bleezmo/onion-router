@@ -1,4 +1,4 @@
-package globals;
+package main.java.globals;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.UUID;
