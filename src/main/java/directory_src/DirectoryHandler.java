@@ -28,7 +28,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
-		Log.i("channel connected");
+		Log.i("channel connected with event:"+e.getState().name());
 		super.channelConnected(ctx, e);
 	}
 
