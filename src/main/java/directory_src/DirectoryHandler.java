@@ -35,8 +35,11 @@ public class DirectoryHandler extends SimpleChannelHandler{
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		ORCommand orc = (ORCommand) e.getMessage();
+		Log.i("received a message");
 		if(orc.isOk()){
+			Log.i("message is ok");
 			if(orc.getClass() == Register.class){
+				Log.i("received register request");
 				final Register r = (Register) orc;
 				final Channel ch = e.getChannel();
 				RegisterSuccess rs = new RegisterSuccess();
@@ -45,9 +48,11 @@ public class DirectoryHandler extends SimpleChannelHandler{
 				byte[] data= rs.encode();
 				ChannelBuffer cb = ChannelBuffers.buffer(data.length);
 				cb.writeBytes(data);
+				Log.i("sending node list");
 				ch.write(rs).addListener(new ChannelFutureListener(){
 					@Override
 					public void operationComplete(ChannelFuture cf) throws Exception {
+						Log.i("adding node to node list");
 						InetSocketAddress sa = (InetSocketAddress) ch.getRemoteAddress();
 						Log.db("adding node: "+r.getNodeName()+" "+sa.getHostName()+" "+r.getServerPort());
 						NodeList.add(r.getNodeName(), new InetSocketAddress(sa.getAddress(), r.getServerPort())); //use the server port given
