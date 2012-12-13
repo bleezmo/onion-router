@@ -1,5 +1,7 @@
 package main.java.commands;
 
+import main.java.utils.Log;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
@@ -14,6 +16,7 @@ public class ORCoder{
 	public static class ORDecoder extends FrameDecoder{
 		@Override
 		protected ORCommand decode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer) throws Exception{
+			Log.i("decoding and shit");
 			if(buffer.readable()){
 				byte command = buffer.readByte();
 				return CommandType.getORCommand(command).decode(ctx, ch, buffer);
