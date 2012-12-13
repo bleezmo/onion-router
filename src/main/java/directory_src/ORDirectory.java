@@ -32,7 +32,7 @@ public class ORDirectory {
 	 */
 	public static void main(String[] args) {
 		DbManager.get();
-		GlobalVars.setNodeName("directory");
+		GlobalVars.setNodeName(GlobalVars.DIRECTORY_NODE);
 		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool());
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ORPipelineFactory(new DirectoryHandler()));
