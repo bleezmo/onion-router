@@ -5,7 +5,7 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import commands.ORDecoder;
+import commands.ORCoder;
 
 public class ORPipelineFactory implements ChannelPipelineFactory{
 	private final SimpleChannelHandler handler;
@@ -14,7 +14,7 @@ public class ORPipelineFactory implements ChannelPipelineFactory{
 	}
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
-		return Channels.pipeline(new ORDecoder(),handler);
+		return Channels.pipeline(new ORCoder.ORDecoder(),new ORCoder.OREncoder(),handler);
 	}
 
 }

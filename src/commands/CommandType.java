@@ -12,6 +12,7 @@ public class CommandType {
 	public static final byte SEND_ACK = 6;
 	public static final byte EXTEND_CIRCUIT = 7;
 	public static final byte EXTEND_CIRCUIT_ACK = 8;
+	public static final byte UNKNOWN = 9;
 	
 	public static final ORCommand getORCommand(byte command){
 		if(command == CommandType.REGISTER){
@@ -30,9 +31,8 @@ public class CommandType {
 			return new ExtendCircuit();
 		}else if(command == CommandType.EXTEND_CIRCUIT_ACK){
 			return new ExtendCircuitAck();
-		}else{
-			//TODO add error response here
-			throw new RuntimeException();
-		}
+		}else if(command == CommandType.ERROR){
+			return new Error();
+		}else return new Unknown();
 	}
 }

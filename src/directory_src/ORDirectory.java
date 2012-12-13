@@ -20,7 +20,7 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 import utils.ORPipelineFactory;
 
 import commands.ORCommand;
-import commands.ORDecoder;
+import commands.ORCoder;
 import commands.Register;
 
 

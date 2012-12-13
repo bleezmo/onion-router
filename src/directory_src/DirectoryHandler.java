@@ -37,7 +37,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 				byte[] data= rs.encode();
 				ChannelBuffer cb = ChannelBuffers.buffer(data.length);
 				cb.writeBytes(data);
-				ch.write(cb).addListener(new ChannelFutureListener(){
+				ch.write(rs).addListener(new ChannelFutureListener(){
 					@Override
 					public void operationComplete(ChannelFuture cf) throws Exception {
 						InetSocketAddress sa = (InetSocketAddress) ch.getRemoteAddress();

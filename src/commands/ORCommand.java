@@ -49,7 +49,7 @@ public abstract class ORCommand extends FrameDecoder{
 	protected final void setError(String error){
 		this.error = error;
 	}
-	public String getError(){
+	public final String getError(){
 		return error;
 	}
 	public boolean isOk(){

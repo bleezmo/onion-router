@@ -34,7 +34,7 @@ public class ClientRegister {
 			public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 				ORCommand command = (ORCommand) e.getMessage();
 				if(command.isOk()){
-					if(command.getClass() == RegisterSuccess.class){
+					if(command instanceof RegisterSuccess){
 						RegisterSuccess rs = (RegisterSuccess) command;
 						NodeList.addAll(rs.getNodeList());
 					}else{
@@ -49,11 +49,8 @@ public class ClientRegister {
 					ChannelStateEvent e) throws Exception {
 				Register r = new Register();
 				r.setServerPort(GlobalVars.serverPort);
-				byte[] data = r.encode();
 				Channel ch = e.getChannel();
-				ChannelBuffer cb = ChannelBuffers.buffer(data.length);
-				cb.writeBytes(data);
-				ch.write(cb);
+				ch.write(r);
 			}
 			
 		}));
