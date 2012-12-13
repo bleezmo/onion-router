@@ -59,8 +59,14 @@ public class DirectoryHandler extends SimpleChannelHandler{
 						ch.close();
 					}
 				});
-			}else Log.w("received unexpected command: "+orc.getCommandType());
-		}else Log.f(orc.getError());
+			}else {
+				Log.w("received unexpected command: "+orc.getCommandType());
+				e.getChannel().close();
+			}
+		}else {
+			Log.f(orc.getError());
+			e.getChannel().close();
+		}
 	}
 
 }

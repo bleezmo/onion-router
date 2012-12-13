@@ -26,7 +26,6 @@ import main.java.commands.Register;
 
 
 public class ORDirectory {
-	private static volatile boolean doShutdown = false;
     /**
 	 * @param args
 	 */
