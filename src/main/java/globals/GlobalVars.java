@@ -13,7 +13,7 @@ public class GlobalVars {
 			}else throw new RuntimeException("cannot have a node name greater then 16 bytes");
 		}
 	}
-	public static final String directoryHost = "localhost";
+	public static final String directoryHost = "ordirectory.herokuapp.com";
 	public static final int directoryPort = 8080;
 	public static final int serverPort = 8081;
 	public static final int terminalPort = 8082;
