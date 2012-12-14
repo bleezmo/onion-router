@@ -10,11 +10,11 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * all NEW_CIRCUIT commands have the same format
- * ***************************
- * | circuit id |
- * | ---------- |
- * | 16 bytes   |
- * ***************************
+ * ***************************************
+ * | circuit id | name size | node name  |
+ * | ---------- | --------- | ---------- |
+ * | 16 bytes   | 1 byte	| size bytes |
+ * ***************************************
  * @author josh
  *
  */

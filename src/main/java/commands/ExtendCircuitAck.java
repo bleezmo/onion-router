@@ -1,5 +1,6 @@
 package main.java.commands;
 
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -58,8 +59,13 @@ public class ExtendCircuitAck extends ORCommand{
 
 	@Override
 	public byte[] encode() {
-		// TODO Auto-generated method stub
-		return null;
+		ByteBuffer bb = ByteBuffer.allocate(16+16+1);
+		bb.put(CommandType.EXTEND_CIRCUIT_ACK);
+		bb.putLong(circuitId.getMostSignificantBits());
+		bb.putLong(circuitId.getLeastSignificantBits());
+		bb.putLong(nextCircuitId.getMostSignificantBits());
+		bb.putLong(nextCircuitId.getLeastSignificantBits());
+		return bb.array();
 	}
 
 	@Override

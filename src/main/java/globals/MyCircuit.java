@@ -34,5 +34,9 @@ public class MyCircuit {
 	public static Node getEntryNode() {
 		return entryNode;
 	}
+	public static final boolean hasCircuit(){
+		if(mycircuit != null && entryNode != null) return true;
+		else return false;
+	}
 	
 }

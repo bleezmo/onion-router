@@ -21,11 +21,11 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import main.java.client_src.Node;
+import main.java.client_src.terminal.TerminalWrite;
 import main.java.commands.ORCommand;
 import main.java.commands.Register;
 import main.java.commands.RegisterSuccess;
 
-import main.java.utils.ChannelWrite;
 import main.java.utils.Log;
 import main.java.utils.ORPipelineFactory;
 
@@ -47,9 +47,9 @@ public class ClientRegister {
 							for(int i = 0; i < nodeList.size(); i++){
 								Node node = nodeList.get(i);
 								String out = node.getNodeName()+" "+node.getAddr().getAddress().getHostAddress()+" "+node.getAddr().getPort()+"\n";
-								ChannelWrite.write(terminalChannel, out.getBytes());
+								TerminalWrite.write(terminalChannel, out.getBytes());
 							}
-							ChannelWrite.write(terminalChannel, ">");
+							TerminalWrite.write(terminalChannel, ">");
 						}
 					}else{
 						Log.f("received the wrong command: "+command.getCommandType());

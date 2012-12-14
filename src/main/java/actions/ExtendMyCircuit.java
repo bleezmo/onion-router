@@ -6,13 +6,14 @@ import java.util.concurrent.Executors;
 
 import main.java.client_src.Circuit;
 import main.java.client_src.Node;
+import main.java.client_src.terminal.TerminalWrite;
+import main.java.commands.ExtendCircuit;
 import main.java.commands.ExtendCircuitAck;
 import main.java.commands.NewCircuit;
 import main.java.commands.NewCircuitAck;
 import main.java.commands.ORCommand;
 import main.java.globals.MyCircuit;
 import main.java.globals.NodeList;
-import main.java.utils.ChannelWrite;
 import main.java.utils.Log;
 import main.java.utils.ORPipelineFactory;
 
@@ -27,7 +28,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
-public class ExtendCircuit {
+public class ExtendMyCircuit {
 	/**
 	 * @param terminalChannel - required to give feedback on the result
 	 */
@@ -46,26 +47,26 @@ public class ExtendCircuit {
 					if(command instanceof ExtendCircuitAck){
 						ExtendCircuitAck ack = (ExtendCircuitAck) command;
 						MyCircuit.extendCircuit(ack.getNextCircuitId());
-						ChannelWrite.write(terminalChannel, "circuit successfully extended\n>");
+						TerminalWrite.write(terminalChannel, "circuit successfully extended\n>");
 						Log.db("circuit successfully extended");
 					}else{
-						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]");
+						TerminalWrite.write(terminalChannel, "received an unexpected command ["+command+"]\n>");
 					}
 				}else{
-					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n");
+					TerminalWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n>");
 				}
 			}
 
 			@Override
 			public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-//				NewCircuit circuit = new NewCircuit();
-//				circuit.setCircuitId(circuitId);
-//				e.getChannel().write(circuit).addListener(new ChannelFutureListener(){
-//					@Override
-//					public void operationComplete(ChannelFuture arg0) throws Exception {
-//						Log.db("requested new circuit with entry node: "+node.getNodeName());
-//					}
-//				});
+				ExtendCircuit ec = new ExtendCircuit();
+				ec.setCircuitId(MyCircuit.get(0));
+				e.getChannel().write(ec).addListener(new ChannelFutureListener(){
+					@Override
+					public void operationComplete(ChannelFuture arg0) throws Exception {
+						Log.db("sent request to extend circuit");
+					}
+				});
 			}
 
 			@Override
@@ -75,6 +76,6 @@ public class ExtendCircuit {
 				e.getCause().printStackTrace();
 			}
 		}));
-//		cb.connect(node.getAddr());
+		cb.connect(MyCircuit.getEntryNode().getAddr());
 	}
 }

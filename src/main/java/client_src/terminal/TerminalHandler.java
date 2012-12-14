@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import main.java.actions.ClientRegister;
 import main.java.actions.CreateCircuit;
+import main.java.actions.ExtendMyCircuit;
 import main.java.client_src.Node;
 import main.java.globals.GlobalVars;
+import main.java.globals.MyCircuit;
 import main.java.globals.NodeList;
-import main.java.utils.ChannelWrite;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -26,20 +27,20 @@ public class TerminalHandler extends SimpleChannelHandler{
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
 		String welcome = "Welcome to Onion Router!\nYou're node name is "+GlobalVars.nodeName()+"\nType each command with a trailing semicolon\nType 'help;' to see the commands\n\n>";
-		ChannelWrite.write(e.getChannel(), welcome);
+		TerminalWrite.write(e.getChannel(), welcome);
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		String command = (String) e.getMessage();
 		if(command.equals(TerminalCommands.HELP)){
-			ChannelWrite.write(e.getChannel(), (TerminalCommands.NODE_LIST+" - Display the list of available nodes from the directory server\n\n").getBytes());
-			ChannelWrite.write(e.getChannel(), (TerminalCommands.NEW_CIRCUIT+" - Create a new circuit with a random node from the list\n\n").getBytes());
-			ChannelWrite.write(e.getChannel(), (TerminalCommands.EXTEND_CIRCUIT+" - Extend the current circuit. Must have created a new circuit first.\n\n").getBytes());
-			ChannelWrite.write(e.getChannel(), (TerminalCommands.SEND+" <url> - use the newly created circuit to perform an HTTP GET anonymously!\n\n").getBytes());
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
+			TerminalWrite.write(e.getChannel(), (TerminalCommands.NODE_LIST+" - Display the list of available nodes from the directory server\n\n").getBytes());
+			TerminalWrite.write(e.getChannel(), (TerminalCommands.NEW_CIRCUIT+" - Create a new circuit with a random node from the list\n\n").getBytes());
+			TerminalWrite.write(e.getChannel(), (TerminalCommands.EXTEND_CIRCUIT+" - Extend the current circuit. Must have created a new circuit first.\n\n").getBytes());
+			TerminalWrite.write(e.getChannel(), (TerminalCommands.SEND+" <url> - use the newly created circuit to perform an HTTP GET anonymously!\n\n").getBytes());
+			TerminalWrite.write(e.getChannel(), ">".getBytes());
 		}else if(command.equals(TerminalCommands.QUIT)){
-			ChannelWrite.write(e.getChannel(), "Goodbye\n".getBytes()).addListener(new ChannelFutureListener(){
+			TerminalWrite.write(e.getChannel(), "Goodbye\n".getBytes()).addListener(new ChannelFutureListener(){
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
 					future.getChannel().close();
@@ -48,16 +49,18 @@ public class TerminalHandler extends SimpleChannelHandler{
 		}else if(command.equals(TerminalCommands.NEW_CIRCUIT)){
 			CreateCircuit.run(e.getChannel());
 		}else if(command.equals(TerminalCommands.EXTEND_CIRCUIT)){
-			
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
+			if(MyCircuit.hasCircuit()){
+				ExtendMyCircuit.run(e.getChannel());
+			}else{
+				TerminalWrite.write(e.getChannel(), "You do not have a circuit to extend. Try calling nc;\n>");
+			}
 		}else if(command.equals(TerminalCommands.NODE_LIST)){
 			ClientRegister.run(e.getChannel());
 		}else if(command.equals(TerminalCommands.SEND)){
 			
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
+			TerminalWrite.write(e.getChannel(), ">".getBytes());
 		}else{
-			ChannelWrite.write(e.getChannel(), ("unknown command: "+command+"\n").getBytes());
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
+			TerminalWrite.write(e.getChannel(), "unknown command: "+command+"\n>");
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import main.java.client_src.Circuit;
 import main.java.client_src.Node;
+import main.java.client_src.terminal.TerminalWrite;
 import main.java.commands.NewCircuit;
 import main.java.commands.NewCircuitAck;
 import main.java.commands.ORCommand;
@@ -16,7 +17,6 @@ import main.java.globals.CircuitMap;
 import main.java.globals.GlobalVars;
 import main.java.globals.MyCircuit;
 import main.java.globals.NodeList;
-import main.java.utils.ChannelWrite;
 import main.java.utils.Log;
 import main.java.utils.ORPipelineFactory;
 
@@ -49,13 +49,13 @@ public class CreateCircuit {
 				if(command.isOk()){
 					if(command instanceof NewCircuitAck){
 						MyCircuit.newCircuit(new Circuit(circuitId,node));
-						ChannelWrite.write(terminalChannel, "new circuit successfully created\n>");
+						TerminalWrite.write(terminalChannel, "new circuit successfully created\n>");
 						Log.db("new circuit created with entry node: "+node.getNodeName());
 					}else{
-						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]\n>");
+						TerminalWrite.write(terminalChannel, "received an unexpected command ["+command+"]\n>");
 					}
 				}else{
-					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n>");
+					TerminalWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n>");
 				}
 				e.getChannel().close();
 			}
