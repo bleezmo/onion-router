@@ -14,6 +14,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
@@ -64,7 +65,13 @@ public class ClientRegister {
 					
 				});
 			}
-			
+
+			@Override
+			public void exceptionCaught(ChannelHandlerContext ctx,
+					ExceptionEvent e) throws Exception {
+				e.getChannel().close();
+				Log.e(e.getCause().getStackTrace());
+			}
 		}));
 		cb.connect(new InetSocketAddress(GlobalVars.directoryHost,GlobalVars.directoryPort));
 	}

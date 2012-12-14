@@ -17,6 +17,11 @@ public class Log {
 	public static final void e(String out){
 		System.out.println("ERROR: "+out);
 	}
+	public static final void e(StackTraceElement[] elements){
+		for(int i = 0; i < elements.length; i++){
+			Log.e(elements[i].toString());
+		}
+	}
 	public static final void f(String out){
 		System.out.println("FATAL: "+out);
 	}
