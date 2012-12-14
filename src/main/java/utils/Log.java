@@ -27,7 +27,7 @@ public class Log {
 	}
 	//db logs
 	public static final void db(String message){
-		db(new ORLog(GlobalVars.getNodeName(),message));
+		db(new ORLog(GlobalVars.nodeName(),message));
 	}
 	private static final void db(ORLog orlog){
 		BasicDBObject doc = new BasicDBObject();

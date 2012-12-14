@@ -38,7 +38,7 @@ public class CreateCircuit {
 	public static final void run(final Channel terminalChannel){
 		ClientBootstrap cb = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool()));
 		ArrayList<Node> nodeList = NodeList.getAll();
-		int nodeIndex = (int) Math.rint((Math.random()*nodeList.size()));
+		int nodeIndex = (int) Math.rint((Math.random()*(nodeList.size()-1)));
 		final Node node = nodeList.get(nodeIndex);
 		final UUID circuitId = UUID.randomUUID();
 		cb.setPipelineFactory(new ORPipelineFactory(new SimpleChannelHandler(){
@@ -49,14 +49,15 @@ public class CreateCircuit {
 				if(command.isOk()){
 					if(command instanceof NewCircuitAck){
 						MyCircuit.newCircuit(new Circuit(circuitId,node));
-						ChannelWrite.write(terminalChannel, "new circuit successfully created");
+						ChannelWrite.write(terminalChannel, "new circuit successfully created\n>");
 						Log.db("new circuit created with entry node: "+node.getNodeName());
 					}else{
-						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]");
+						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]\n>");
 					}
 				}else{
-					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n");
+					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n>");
 				}
+				e.getChannel().close();
 			}
 
 			@Override

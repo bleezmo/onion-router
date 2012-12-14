@@ -2,8 +2,10 @@ package main.java.client_src.terminal;
 
 import java.util.ArrayList;
 
+import main.java.actions.ClientRegister;
 import main.java.actions.CreateCircuit;
 import main.java.client_src.Node;
+import main.java.globals.GlobalVars;
 import main.java.globals.NodeList;
 import main.java.utils.ChannelWrite;
 
@@ -23,11 +25,8 @@ public class TerminalHandler extends SimpleChannelHandler{
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
-		byte[] welcome = "Welcome to Onion Router!\nType each command with a trailing semicolon\nType 'help;' to see the commands\n\n>".getBytes();
-		Channel ch = e.getChannel();
-		ChannelBuffer cb = ChannelBuffers.buffer(welcome.length);
-		cb.writeBytes(welcome);
-		ch.write(cb);
+		String welcome = "Welcome to Onion Router!\nYou're node name is "+GlobalVars.nodeName()+"\nType each command with a trailing semicolon\nType 'help;' to see the commands\n\n>";
+		ChannelWrite.write(e.getChannel(), welcome);
 	}
 
 	@Override
@@ -48,18 +47,11 @@ public class TerminalHandler extends SimpleChannelHandler{
 			});
 		}else if(command.equals(TerminalCommands.NEW_CIRCUIT)){
 			CreateCircuit.run(e.getChannel());
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
 		}else if(command.equals(TerminalCommands.EXTEND_CIRCUIT)){
 			
 			ChannelWrite.write(e.getChannel(), ">".getBytes());
 		}else if(command.equals(TerminalCommands.NODE_LIST)){
-			ArrayList<Node> nodeList = NodeList.getAll();
-			for(int i = 0; i < nodeList.size(); i++){
-				Node node = nodeList.get(i);
-				String out = node.getNodeName()+" "+node.getAddr().getAddress().getHostAddress()+" "+node.getAddr().getPort()+"\n";
-				ChannelWrite.write(e.getChannel(), out.getBytes());
-			}
-			ChannelWrite.write(e.getChannel(), ">".getBytes());
+			ClientRegister.run(e.getChannel());
 		}else if(command.equals(TerminalCommands.SEND)){
 			
 			ChannelWrite.write(e.getChannel(), ">".getBytes());

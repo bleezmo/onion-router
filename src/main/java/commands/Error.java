@@ -16,15 +16,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
  *
  */
 public class Error extends ORCommand{
-	private int size;
 	private String message;
-	
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		if(openWrite())this.size = size;
-	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -34,9 +27,10 @@ public class Error extends ORCommand{
 
 	@Override
 	public byte[] encode() {
-		byte[] data = getError().getBytes();
-		ByteBuffer bb = ByteBuffer.allocate(data.length+1);
+		byte[] data = message.getBytes();
+		ByteBuffer bb = ByteBuffer.allocate(data.length+2+1);
 		bb.put(CommandType.ERROR);
+		bb.put((byte) data.length);
 		bb.put(data);
 		return bb.array();
 	}
@@ -49,7 +43,7 @@ public class Error extends ORCommand{
 	@Override
 	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buf) {
 		if(buf.readableBytes() < 2) return;
-		size = buf.readShort();
+		int size = buf.readShort();
 		if(buf.readableBytes() < size) return;
 		StringBuffer sb = new StringBuffer(size);
 		for(int i = 0; i < size; i++){

@@ -20,16 +20,19 @@ public class NodeList {
 	public static Node get(int index){
 		return nodeList.get(index);
 	}
-	public static void add(String nodeName, InetSocketAddress node){
+	public static void add(Node node){
+		if(node.getNodeName().equals(GlobalVars.nodeName())) return;
 		for(int i = 0; i < nodeList.size(); i++){
-			if(nodeList.get(i).getNodeName().equals(nodeName)){
+			if(nodeList.get(i).getNodeName().equals(node.getNodeName())){
 				return;
 			}
 		}
-		nodeList.add(new Node(nodeName,node));
+		nodeList.add(node);
 	}
 	public static void addAll(ArrayList<Node> nodes){
-		nodeList.addAll(nodes);
+		for(int i = 0; i < nodes.size(); i++){
+			add(nodes.get(i));
+		}
 	}
 	/**
 	 * @return a new array list copied from the internal node list

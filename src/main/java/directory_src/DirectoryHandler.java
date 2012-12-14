@@ -45,7 +45,9 @@ public class DirectoryHandler extends SimpleChannelHandler{
 					public void operationComplete(ChannelFuture cf) throws Exception {
 						InetSocketAddress sa = (InetSocketAddress) ch.getRemoteAddress();
 						Log.db("adding node: "+r.getNodeName()+" "+sa.getAddress().getHostAddress()+" "+r.getServerPort());
-						NodeList.add(r.getNodeName(), new InetSocketAddress(sa.getAddress(), r.getServerPort())); //use the server port given
+						NodeList.add(
+								new Node(r.getNodeName(), new InetSocketAddress(sa.getAddress(), r.getServerPort()))
+								); //use the server port given
 						ch.close();
 					}
 				});

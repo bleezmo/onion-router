@@ -41,18 +41,19 @@ public class ExtendCircuit {
 
 			@Override
 			public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-//				ORCommand command = (ORCommand) e.getMessage();
-//				if(command.isOk()){
-//					if(command instanceof ExtendCircuitAck){
-//						MyCircuit.newCircuit(new Circuit(circuitId,node));
-//						ChannelWrite.write(terminalChannel, "new circuit successfully created");
-//						Log.db("new circuit created with entry node: "+node.getNodeName());
-//					}else{
-//						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]");
-//					}
-//				}else{
-//					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n");
-//				}
+				ORCommand command = (ORCommand) e.getMessage();
+				if(command.isOk()){
+					if(command instanceof ExtendCircuitAck){
+						ExtendCircuitAck ack = (ExtendCircuitAck) command;
+						MyCircuit.extendCircuit(ack.getNextCircuitId());
+						ChannelWrite.write(terminalChannel, "circuit successfully extended\n>");
+						Log.db("circuit successfully extended");
+					}else{
+						ChannelWrite.write(terminalChannel, "received an unexpected command ["+command+"]");
+					}
+				}else{
+					ChannelWrite.write(terminalChannel,"an error occured when trying to create a new circuit ["+command.getError()+"]\n");
+				}
 			}
 
 			@Override

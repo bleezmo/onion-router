@@ -44,9 +44,9 @@ public class OnionRouter {
 	public static void main(String[] args) {
 		DbManager.get();
 		if(args != null && args.length > 0){
-			GlobalVars.setNodeName(args[0]);
+			GlobalVars.setVarTemplate(GlobalVars.template1(args[0]));
 		}else{
-			GlobalVars.setNodeName("anonymous");
+			GlobalVars.setVarTemplate(GlobalVars.template2());
 		}
 		Executor executor = Executors.newCachedThreadPool();
 		ChannelFactory serverFactory = new NioServerSocketChannelFactory(executor,executor);
@@ -64,10 +64,10 @@ public class OnionRouter {
 		});
 		sb.setOption("child.tcpNoDelay", true);
 		sb.setOption("child.keepAlive", true);
-		Channel server = sb.bind(new InetSocketAddress(GlobalVars.serverPort));
-		Channel terminal = terminalBootstrap.bind(new InetSocketAddress(GlobalVars.terminalPort));
+		Channel server = sb.bind(new InetSocketAddress(GlobalVars.serverPort()));
+		Channel terminal = terminalBootstrap.bind(new InetSocketAddress(GlobalVars.terminalPort()));
 		allChannels.add(server);
 		allChannels.add(terminal);
-		ClientRegister.run();
+		ClientRegister.run(null);
 	}
 }
