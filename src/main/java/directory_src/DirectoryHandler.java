@@ -43,7 +43,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 					@Override
 					public void operationComplete(ChannelFuture cf) throws Exception {
 						InetSocketAddress sa = (InetSocketAddress) ch.getRemoteAddress();
-						Log.db("adding node: "+r.getNodeName()+" "+sa.getHostName()+" "+r.getServerPort());
+						Log.db("adding node: "+r.getNodeName()+" "+sa.getAddress().getHostAddress()+" "+r.getServerPort());
 						NodeList.add(r.getNodeName(), new InetSocketAddress(sa.getAddress(), r.getServerPort())); //use the server port given
 						ch.close();
 					}
@@ -62,6 +62,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 			throws Exception {
 		e.getChannel().close();
+		Log.e(e.getCause().getMessage());
 		Log.e(e.getCause().getStackTrace());
 	}
 

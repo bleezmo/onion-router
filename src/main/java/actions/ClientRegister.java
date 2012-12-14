@@ -38,6 +38,7 @@ public class ClientRegister {
 					if(command instanceof RegisterSuccess){
 						RegisterSuccess rs = (RegisterSuccess) command;
 						NodeList.addAll(rs.getNodeList());
+						Log.db("added node list "+rs.toString());
 					}else{
 						Log.f("received the wrong command: "+command.getCommandType());
 					}
@@ -59,6 +60,7 @@ public class ClientRegister {
 			public void exceptionCaught(ChannelHandlerContext ctx,
 					ExceptionEvent e) throws Exception {
 				e.getChannel().close();
+				Log.e(e.getCause().getMessage());
 				Log.e(e.getCause().getStackTrace());
 			}
 		}));
