@@ -1,5 +1,6 @@
 package main.java.commands;
 
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -41,8 +42,11 @@ public class NewCircuit extends ORCommand{
 
 	@Override
 	public byte[] encode() {
-		// TODO Auto-generated method stub
-		return null;
+		ByteBuffer bb = ByteBuffer.allocate(16+1);
+		bb.put(CommandType.NEW_CIRCUIT);
+		bb.putLong(circuitId.getMostSignificantBits());
+		bb.putLong(circuitId.getLeastSignificantBits());
+		return bb.array();
 	}
 	@Override
 	public byte getCommandType() {

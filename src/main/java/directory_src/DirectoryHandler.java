@@ -20,6 +20,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import main.java.utils.Log;
 
+import main.java.client_src.Node;
 import main.java.commands.ORCommand;
 import main.java.commands.Register;
 import main.java.commands.RegisterSuccess;
@@ -34,7 +35,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 				final Register r = (Register) orc;
 				final Channel ch = e.getChannel();
 				RegisterSuccess rs = new RegisterSuccess();
-				ArrayList<NodeList.Node> nodeList = NodeList.getAll();
+				ArrayList<Node> nodeList = NodeList.getAll();
 				rs.setNodeList(nodeList);
 				byte[] data= rs.encode();
 				ChannelBuffer cb = ChannelBuffers.buffer(data.length);

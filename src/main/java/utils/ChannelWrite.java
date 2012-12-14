@@ -6,6 +6,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 
 public class ChannelWrite {
+	public static final ChannelFuture write(Channel ch, String data){
+		return write(ch,data.getBytes());
+	}
 	public static final ChannelFuture write(Channel ch, byte[] data){
 		ChannelBuffer cb = ChannelBuffers.buffer(data.length);
 		cb.writeBytes(data);

@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import main.java.client_src.Node;
 import main.java.globals.NodeList;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -26,18 +27,18 @@ import main.java.utils.Log;
  *
  */
 public class RegisterSuccess extends ORCommand{
-	private ArrayList<NodeList.Node> nodeList = new ArrayList<NodeList.Node>();
+	private ArrayList<Node> nodeList = new ArrayList<Node>();
 
-	public ArrayList<NodeList.Node> getNodeList() {
+	public ArrayList<Node> getNodeList() {
 		return nodeList;
 	}
 
-	public void setNodeList(ArrayList<NodeList.Node> nodeList) {
+	public void setNodeList(ArrayList<Node> nodeList) {
 		if(openWrite()){
 			this.nodeList = nodeList;
 		}
 	}
-	private static final NodeList.Node decodeNode(ChannelBuffer buffer){
+	private static final Node decodeNode(ChannelBuffer buffer){
 		if(buffer.readableBytes() < 1) return null;
 		byte nodeSize = buffer.readByte();
 		int nameSize = nodeSize - 6;
@@ -50,13 +51,13 @@ public class RegisterSuccess extends ORCommand{
 		if(buffer.readableBytes() < 2) return null;
 		int port = buffer.readShort();
 		try {
-			return new NodeList.Node(new String(name), new InetSocketAddress(InetAddress.getByAddress(addr),port));
+			return new Node(new String(name), new InetSocketAddress(InetAddress.getByAddress(addr),port));
 		} catch (UnknownHostException e) {
 			Log.e("bad host address: "+e.getMessage());
 			return null;
 		}
 	}
-	private static final byte[] encodeNode(NodeList.Node node){
+	private static final byte[] encodeNode(Node node){
 		byte[] name = node.getNodeName().getBytes();
 		byte[] addr = node.getAddr().getAddress().getAddress();
 		int port = node.getAddr().getPort();
@@ -73,7 +74,7 @@ public class RegisterSuccess extends ORCommand{
 		int messageSize = buffer.readInt();
 		if(buffer.readableBytes() < messageSize) return;
 		while(buffer.readable()){
-			NodeList.Node node = decodeNode(buffer);
+			Node node = decodeNode(buffer);
 			if(node != null) nodeList.add(node);
 			else Log.f("bad node");
 		}

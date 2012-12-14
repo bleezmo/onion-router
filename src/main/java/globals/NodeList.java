@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import main.java.client_src.Node;
+
 /**
  * list of nodes. at the moment it updates only once
  * TODO 
@@ -36,19 +38,5 @@ public class NodeList {
 		ArrayList<Node>  newList = new ArrayList<Node> ();
 		newList.addAll(nodeList);
 		return newList;
-	}
-	public static class Node{
-		private final String nodeName;
-		private final InetSocketAddress addr;
-		public Node(String nodeName, InetSocketAddress addr){
-			this.nodeName = nodeName;
-			this.addr = addr;
-		}
-		public String getNodeName() {
-			return nodeName;
-		}
-		public InetSocketAddress getAddr() {
-			return addr;
-		}
 	}
 }

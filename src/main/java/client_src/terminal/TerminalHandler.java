@@ -2,6 +2,8 @@ package main.java.client_src.terminal;
 
 import java.util.ArrayList;
 
+import main.java.actions.CreateCircuit;
+import main.java.client_src.Node;
 import main.java.globals.NodeList;
 import main.java.utils.ChannelWrite;
 
@@ -45,15 +47,15 @@ public class TerminalHandler extends SimpleChannelHandler{
 				}
 			});
 		}else if(command.equals(TerminalCommands.NEW_CIRCUIT)){
-			
+			CreateCircuit.run(e.getChannel());
 			ChannelWrite.write(e.getChannel(), ">".getBytes());
 		}else if(command.equals(TerminalCommands.EXTEND_CIRCUIT)){
 			
 			ChannelWrite.write(e.getChannel(), ">".getBytes());
 		}else if(command.equals(TerminalCommands.NODE_LIST)){
-			ArrayList<NodeList.Node> nodeList = NodeList.getAll();
+			ArrayList<Node> nodeList = NodeList.getAll();
 			for(int i = 0; i < nodeList.size(); i++){
-				NodeList.Node node = nodeList.get(i);
+				Node node = nodeList.get(i);
 				String out = node.getNodeName()+" "+node.getAddr().getAddress().getHostAddress()+" "+node.getAddr().getPort()+"\n";
 				ChannelWrite.write(e.getChannel(), out.getBytes());
 			}
