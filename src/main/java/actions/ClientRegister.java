@@ -38,7 +38,6 @@ public class ClientRegister {
 					if(command instanceof RegisterSuccess){
 						RegisterSuccess rs = (RegisterSuccess) command;
 						NodeList.addAll(rs.getNodeList());
-						Log.db("received node list "+rs.toString());
 					}else{
 						Log.f("received the wrong command: "+command.getCommandType());
 					}
@@ -53,17 +52,7 @@ public class ClientRegister {
 				r.setServerPort(GlobalVars.serverPort);
 				r.setNodeName(GlobalVars.getNodeName());
 				Channel ch = e.getChannel();
-				Log.i("connected. sending register");
-				ch.write(r).addListener(new ChannelFutureListener(){
-
-					@Override
-					public void operationComplete(ChannelFuture arg0)
-							throws Exception {
-						Log.i("done sending register");
-						
-					}
-					
-				});
+				ch.write(r);
 			}
 
 			@Override

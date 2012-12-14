@@ -16,7 +16,6 @@ public class ORCoder{
 	public static class ORDecoder extends FrameDecoder{
 		@Override
 		protected ORCommand decode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer) throws Exception{
-			Log.i("decoding and shit");
 			if(buffer.readable()){
 				byte command = buffer.readByte();
 				return CommandType.getORCommand(command).decode(ctx, ch, buffer);

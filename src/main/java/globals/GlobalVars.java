@@ -15,7 +15,7 @@ public class GlobalVars {
 		}
 	}
 	public static final String directoryHost = "ordirectory.herokuapp.com";
-	public static final int directoryPort = getDirectoryPort();
+	public static final int directoryPort = 8080;
 	private static final int getDirectoryPort() {
 		if(System.getenv("PORT") != null){
 			return Integer.valueOf(System.getenv("PORT"));
