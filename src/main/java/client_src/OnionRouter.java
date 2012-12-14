@@ -29,6 +29,8 @@ import main.java.actions.ClientRegister;
 
 import main.java.utils.ORPipelineFactory;
 
+import main.java.client_src.terminal.TerminalDecoder;
+import main.java.client_src.terminal.TerminalHandler;
 import main.java.commands.ORCommand;
 import main.java.commands.ORCoder;
 
@@ -57,7 +59,7 @@ public class OnionRouter {
 		terminalBootstrap.setPipelineFactory(new ChannelPipelineFactory(){
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline();
+				return Channels.pipeline(new TerminalDecoder(),new TerminalHandler());
 			}
 		});
 		sb.setOption("child.tcpNoDelay", true);

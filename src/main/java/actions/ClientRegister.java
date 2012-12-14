@@ -60,8 +60,7 @@ public class ClientRegister {
 			public void exceptionCaught(ChannelHandlerContext ctx,
 					ExceptionEvent e) throws Exception {
 				e.getChannel().close();
-				Log.e(e.getCause().getMessage());
-				Log.e(e.getCause().getStackTrace());
+				e.getCause().printStackTrace();
 			}
 		}));
 		cb.connect(new InetSocketAddress(GlobalVars.directoryHost,GlobalVars.directoryPort));

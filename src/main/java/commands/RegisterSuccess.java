@@ -60,7 +60,7 @@ public class RegisterSuccess extends ORCommand{
 		byte[] name = node.getNodeName().getBytes();
 		byte[] addr = node.getAddr().getAddress().getAddress();
 		int port = node.getAddr().getPort();
-		ByteBuffer bb = ByteBuffer.allocate(name.length+6);
+		ByteBuffer bb = ByteBuffer.allocate(name.length+7);
 		bb.put((byte) (name.length + 6));
 		bb.put(name);
 		bb.put(addr);

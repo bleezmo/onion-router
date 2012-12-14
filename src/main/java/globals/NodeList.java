@@ -19,11 +19,19 @@ public class NodeList {
 		return nodeList.get(index);
 	}
 	public static void add(String nodeName, InetSocketAddress node){
+		for(int i = 0; i < nodeList.size(); i++){
+			if(nodeList.get(i).getNodeName().equals(nodeName)){
+				return;
+			}
+		}
 		nodeList.add(new Node(nodeName,node));
 	}
 	public static void addAll(ArrayList<Node> nodes){
 		nodeList.addAll(nodes);
 	}
+	/**
+	 * @return a new array list copied from the internal node list
+	 */
 	public static ArrayList<Node> getAll(){
 		ArrayList<Node>  newList = new ArrayList<Node> ();
 		newList.addAll(nodeList);

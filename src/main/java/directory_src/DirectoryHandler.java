@@ -62,8 +62,7 @@ public class DirectoryHandler extends SimpleChannelHandler{
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 			throws Exception {
 		e.getChannel().close();
-		Log.e(e.getCause().getMessage());
-		Log.e(e.getCause().getStackTrace());
+		e.getCause().printStackTrace();
 	}
 
 }
