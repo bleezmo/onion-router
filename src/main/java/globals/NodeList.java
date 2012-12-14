@@ -25,8 +25,8 @@ public class NodeList {
 		nodeList.addAll(nodes);
 	}
 	public static ArrayList<Node> getAll(){
-		ArrayList<Node>  newList = new ArrayList<Node> (nodeList.size());
-		Collections.copy(newList,nodeList);
+		ArrayList<Node>  newList = new ArrayList<Node> ();
+		newList.addAll(nodeList);
 		return newList;
 	}
 	public static class Node{
