@@ -10,7 +10,9 @@ import main.java.commands.ExtendCircuitAck;
 import main.java.commands.NewCircuit;
 import main.java.commands.NewCircuitAck;
 import main.java.commands.ORCommand;
+import main.java.commands.RegisterSuccess;
 import main.java.globals.CircuitMap;
+import main.java.globals.GlobalVars;
 import main.java.globals.MyCircuit;
 import main.java.globals.NodeList;
 import main.java.utils.Log;
@@ -43,6 +45,7 @@ public class ServerHandler  extends SimpleChannelHandler{
 		if(command.isOk()){
 			if(command instanceof NewCircuit){
 				NewCircuit circuit = (NewCircuit) command;
+				CircuitMap.addReceivingCircuit(circuit.getCircuitId(), circuit.getNodeName());
 				NewCircuitAck ack = new NewCircuitAck();
 				ack.setCircuitId(circuit.getCircuitId());
 				Log.db("received circuit request. sending acknowledgement");
@@ -55,6 +58,10 @@ public class ServerHandler  extends SimpleChannelHandler{
 			}else if(command instanceof ExtendCircuit){
 				ExtendCircuit circuit = (ExtendCircuit) command;
 				extendOtherCircuit(e.getChannel(),circuit.getCircuitId());
+			}else if(command instanceof RegisterSuccess){
+				RegisterSuccess rs = (RegisterSuccess) command;
+				NodeList.addAll(rs.getNodeList());
+				Log.db("received node list "+rs.toString());
 			}else{
 				Log.e("received an unexpected command "+command.getCommandType());
 				e.getChannel().close();
@@ -74,6 +81,14 @@ public class ServerHandler  extends SimpleChannelHandler{
 	private static final void extendOtherCircuit(final Channel returnChannel, final UUID srcCircuitId){
 		ClientBootstrap cb = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(),Executors.newCachedThreadPool()));
 		ArrayList<Node> nodeList = NodeList.getAll();
+		String nodeName = CircuitMap.getReceivingCircuit(srcCircuitId);
+		//first remove the source node from the list of nodes to extend to
+		for(int i = 0; i < nodeList.size(); i++){
+			if(nodeList.get(i).getNodeName().equals(nodeName)){
+				nodeList.remove(i);
+				break;
+			}
+		}
 		int nodeIndex = (int) Math.rint((Math.random()*(nodeList.size()-1)));
 		final Node node = nodeList.get(nodeIndex);
 		final UUID circuitId = UUID.randomUUID();
@@ -94,7 +109,7 @@ public class ServerHandler  extends SimpleChannelHandler{
 								future.getChannel().close();
 							}
 						});
-						Log.db("new circuit created with node: "+node.getNodeName()+" to extend another");
+						Log.db("new circuit created with node "+node.getNodeName()+" to extend "+CircuitMap.getReceivingCircuit(srcCircuitId));
 					}else{
 						Log.e("received an unexpected command ["+command+"]");
 					}
@@ -108,10 +123,11 @@ public class ServerHandler  extends SimpleChannelHandler{
 			public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 				NewCircuit circuit = new NewCircuit();
 				circuit.setCircuitId(circuitId);
+				circuit.setNodeName(GlobalVars.nodeName());
 				e.getChannel().write(circuit).addListener(new ChannelFutureListener(){
 					@Override
 					public void operationComplete(ChannelFuture arg0) throws Exception {
-						Log.db("requested new circuit with node "+node.getNodeName()+" to extend another");
+						Log.db("requested new circuit with node "+node.getNodeName()+" to extend "+CircuitMap.getReceivingCircuit(srcCircuitId));
 					}
 				});
 			}
@@ -121,6 +137,10 @@ public class ServerHandler  extends SimpleChannelHandler{
 					ExceptionEvent e) throws Exception {
 				e.getChannel().close();
 				e.getCause().printStackTrace();
+				//if we were unable to connect to the given node, assume the node is no longer reachable and remove it from the list of nodes
+				if(e.getCause() instanceof java.net.ConnectException){
+					NodeList.removeNode(node);
+				}
 			}
 		}));
 		cb.connect(node.getAddr());

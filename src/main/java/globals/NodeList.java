@@ -42,4 +42,7 @@ public class NodeList {
 		newList.addAll(nodeList);
 		return newList;
 	}
+	public static boolean removeNode(Node node){
+		return nodeList.remove(node);
+	}
 }

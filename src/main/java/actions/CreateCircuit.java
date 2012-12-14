@@ -64,6 +64,7 @@ public class CreateCircuit {
 			public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 				NewCircuit circuit = new NewCircuit();
 				circuit.setCircuitId(circuitId);
+				circuit.setNodeName(GlobalVars.nodeName());
 				e.getChannel().write(circuit).addListener(new ChannelFutureListener(){
 					@Override
 					public void operationComplete(ChannelFuture arg0) throws Exception {

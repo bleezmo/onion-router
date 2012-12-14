@@ -55,7 +55,14 @@ public class TerminalHandler extends SimpleChannelHandler{
 				TerminalWrite.write(e.getChannel(), "You do not have a circuit to extend. Try calling nc;\n>");
 			}
 		}else if(command.equals(TerminalCommands.NODE_LIST)){
-			ClientRegister.run(e.getChannel());
+			//ClientRegister.run(e.getChannel());
+			ArrayList<Node> nodeList = NodeList.getAll();
+			for(int i = 0; i < nodeList.size(); i++){
+				Node node = nodeList.get(i);
+				String out = node.getNodeName()+" "+node.getAddr().getAddress().getHostAddress()+" "+node.getAddr().getPort()+"\n";
+				TerminalWrite.write(e.getChannel(), out.getBytes());
+			}
+			TerminalWrite.write(e.getChannel(), ">");
 		}else if(command.equals(TerminalCommands.SEND)){
 			
 			TerminalWrite.write(e.getChannel(), ">".getBytes());

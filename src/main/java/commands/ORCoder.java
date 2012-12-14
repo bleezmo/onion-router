@@ -8,6 +8,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
@@ -20,7 +21,12 @@ public class ORCoder{
 				byte command = buffer.readByte();
 				return CommandType.getORCommand(command).decode(ctx, ch, buffer);
 			}else return null;
-		}	
+		}
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+			e.getChannel().close();
+			e.getCause().printStackTrace();
+		}
 	}
 	public static class OREncoder extends SimpleChannelHandler{
 		@Override
@@ -35,6 +41,12 @@ public class ORCoder{
 				Channels.write(ctx, e.getFuture(), cb);
 			}
 			
+		}
+
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+			e.getChannel().close();
+			e.getCause().printStackTrace();
 		}
 
 		
