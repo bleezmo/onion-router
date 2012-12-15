@@ -2,7 +2,6 @@ package main.java.client_src;
 
 import main.java.globals.DbManager;
 import main.java.globals.GlobalVars;
-import main.java.globals.GlobalVars.VarTemplate;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
@@ -44,8 +43,8 @@ public class OnionRouter {
 	 */
 	public static void main(String[] args) {
 		DbManager.get();
-		if(args != null && args.length == 3){
-			GlobalVars.setVarTemplate(new VarTemplate(Integer.valueOf(args[0]),Integer.valueOf(args[1]),args[2]));
+		if(args != null && args.length > 0){
+			GlobalVars.setVarTemplate(GlobalVars.template1(args[0]));
 		}else{
 			GlobalVars.setVarTemplate(GlobalVars.template1());
 		}
