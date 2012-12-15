@@ -27,8 +27,14 @@ public class GlobalVars {
 	public static final VarTemplate template4(String nodeName){
 		return new VarTemplate(8087,8088,nodeName);
 	}
+	public static final VarTemplate template5(){
+		return new VarTemplate(8089,8089,"user");
+	}
+	public static final VarTemplate template5(String nodeName){
+		return new VarTemplate(8089,8089,nodeName);
+	}
 	
-	public static final String directoryHost = "localhost";
+	public static final String directoryHost = "ec2-107-22-59-195.compute-1.amazonaws.com";
 	public static final int directoryPort = 8080;
 	
 	public static final String returnIpHost = "localhost";
@@ -59,7 +65,7 @@ public class GlobalVars {
 		private final int serverPort;
 		private final int terminalPort;
 		private final String nodeName;
-		private VarTemplate(int serverPort, int terminalPort, String nodeName){
+		public VarTemplate(int serverPort, int terminalPort, String nodeName){
 			this.serverPort = serverPort;
 			this.terminalPort = terminalPort;
 			if(nodeName.getBytes().length < 16){
