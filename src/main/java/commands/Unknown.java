@@ -22,4 +22,10 @@ public class Unknown extends ORCommand{
 		done();
 	}
 
+	@Override
+	public ORCommand decode(byte[] data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

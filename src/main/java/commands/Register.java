@@ -59,5 +59,15 @@ public class Register extends ORCommand{
 	public byte getCommandType() {
 		return CommandType.REGISTER;
 	}
-	
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.REGISTER) throw new RuntimeException("wrong type");
+		int size = bb.get();
+		byte[] name = new byte[size-2];
+		bb.get(name);
+		nodeName = new String(name);
+		serverPort = bb.getShort();
+		return this;
+	}
 }

@@ -31,6 +31,9 @@ public class GlobalVars {
 	public static final String directoryHost = "localhost";
 	public static final int directoryPort = 8080;
 	
+	public static final String returnIpHost = "localhost";
+	public static final int returnIpPort = 9000;
+	
 	private static VarTemplate varTemplate;
 	public static final int serverPort(){
 		return getVarTemplate().serverPort;

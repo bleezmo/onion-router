@@ -117,4 +117,30 @@ public class RegisterSuccess extends ORCommand{
 		message += "]";
 		return message;
 	}
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.REGISTER_SUCCESS) throw new RuntimeException("wrong type");
+		int messageSize = bb.getInt();
+		while(bb.remaining() > 0){
+			Node node = decodeNode(bb);
+			if(node != null) nodeList.add(node);
+			else Log.f("bad node");
+		}
+		return this;
+	}
+	private static final Node decodeNode(ByteBuffer bb){
+		int nodeSize = bb.get();
+		byte[] nodeName = new byte[nodeSize-6];
+		bb.get(nodeName);
+		byte[] addr = new byte[4];
+		bb.get(addr);
+		int port = bb.getShort();
+		try {
+			return new Node(new String(nodeName), new InetSocketAddress(InetAddress.getByAddress(addr),port));
+		} catch (UnknownHostException e) {
+			Log.e("bad host address: "+e.getMessage());
+			return null;
+		}
+	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import main.java.actions.ClientRegister;
 import main.java.actions.CreateCircuit;
 import main.java.actions.ExtendMyCircuit;
+import main.java.actions.SendRequest;
 import main.java.client_src.Node;
 import main.java.globals.GlobalVars;
 import main.java.globals.MyCircuit;
@@ -64,8 +65,7 @@ public class TerminalHandler extends SimpleChannelHandler{
 			}
 			TerminalWrite.write(e.getChannel(), ">");
 		}else if(command.equals(TerminalCommands.SEND)){
-			
-			TerminalWrite.write(e.getChannel(), ">".getBytes());
+			SendRequest.run(e.getChannel());
 		}else{
 			TerminalWrite.write(e.getChannel(), "unknown command: "+command+"\n>");
 		}

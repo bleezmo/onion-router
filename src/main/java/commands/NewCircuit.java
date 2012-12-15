@@ -65,5 +65,17 @@ public class NewCircuit extends ORCommand{
 	public byte getCommandType() {
 		return CommandType.NEW_CIRCUIT;
 	}
-	
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.NEW_CIRCUIT) throw new RuntimeException("wrong type");
+		long msb = bb.getLong();
+		long lsb = bb.getLong();
+		circuitId = new UUID(msb,lsb);
+		int size = bb.get();
+		byte[] name = new byte[size];
+		bb.get(name);
+		this.nodeName = new String(name);
+		return this;
+	}
 }

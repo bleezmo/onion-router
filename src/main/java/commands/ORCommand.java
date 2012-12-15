@@ -30,6 +30,7 @@ public abstract class ORCommand extends FrameDecoder{
 			return null;
 		}
 	}
+	public abstract ORCommand decode(byte[] data);
 	public abstract byte[] encode();
 	public abstract byte getCommandType();
 	/**

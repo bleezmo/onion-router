@@ -46,7 +46,7 @@ public class OnionRouter {
 		if(args != null && args.length > 0){
 			GlobalVars.setVarTemplate(GlobalVars.template1(args[0]));
 		}else{
-			GlobalVars.setVarTemplate(GlobalVars.template4());
+			GlobalVars.setVarTemplate(GlobalVars.template1());
 		}
 		Executor executor = Executors.newCachedThreadPool();
 		ChannelFactory serverFactory = new NioServerSocketChannelFactory(executor,executor);

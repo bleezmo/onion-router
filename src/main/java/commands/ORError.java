@@ -15,7 +15,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
  * @author josh
  *
  */
-public class Error extends ORCommand{
+public class ORError extends ORCommand{
 	private String message;
 
 	public String getMessage() {
@@ -52,5 +52,14 @@ public class Error extends ORCommand{
 		message = sb.toString();
 		done();
 	}
-
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.ERROR) throw new RuntimeException("wrong type");
+		int size = bb.getShort();
+		byte[] mbuf = new byte[size];
+		bb.get(mbuf);
+		message = new String(mbuf);
+		return this;
+	}
 }

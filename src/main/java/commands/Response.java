@@ -5,7 +5,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 
 
-public class SendAck extends ORCommand{
+public class Response extends ORCommand{
 
 	@Override
 	protected void ORDecode(ChannelHandlerContext ctx, Channel ch, ChannelBuffer buffer){
@@ -20,7 +20,13 @@ public class SendAck extends ORCommand{
 
 	@Override
 	public byte getCommandType() {
-		return CommandType.SEND_ACK;
+		return CommandType.RESPONSE;
+	}
+
+	@Override
+	public ORCommand decode(byte[] data) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

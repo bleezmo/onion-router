@@ -55,4 +55,14 @@ public class ExtendCircuit extends ORCommand{
 		return CommandType.EXTEND_CIRCUIT;
 	}
 
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.EXTEND_CIRCUIT) throw new RuntimeException("wrong type");
+		long msb = bb.getLong();
+		long lsb = bb.getLong();
+		circuitId = new UUID(msb,lsb);
+		return this;
+	}
+
 }

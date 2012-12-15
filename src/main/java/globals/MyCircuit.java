@@ -38,5 +38,14 @@ public class MyCircuit {
 		if(mycircuit != null && entryNode != null) return true;
 		else return false;
 	}
-	
+	public static final String buildString(){
+		if(mycircuit == null) return "[]";
+		int end = mycircuit.size()-1;
+		String out = "[";
+		for(int i = 0; i < end; i++){
+			out += mycircuit.get(i).toString()+" -> ";
+		}
+		out += mycircuit.get(end).toString()+"]";
+		return out;
+	}
 }

@@ -72,4 +72,17 @@ public class ExtendCircuitAck extends ORCommand{
 	public byte getCommandType() {
 		return CommandType.EXTEND_CIRCUIT_ACK;
 	}
+
+	@Override
+	public ORCommand decode(byte[] data) {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		if(bb.get() != CommandType.EXTEND_CIRCUIT_ACK) throw new RuntimeException("wrong type");
+		long msb = bb.getLong();
+		long lsb = bb.getLong();
+		circuitId = new UUID(msb,lsb);
+		msb = bb.getLong();
+		lsb = bb.getLong();
+		nextCircuitId = new UUID(msb,lsb);
+		return this;
+	}
 }

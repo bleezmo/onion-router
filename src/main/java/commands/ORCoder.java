@@ -39,8 +39,7 @@ public class ORCoder{
 				ChannelBuffer cb = ChannelBuffers.buffer(data.length);
 				cb.writeBytes(data);
 				Channels.write(ctx, e.getFuture(), cb);
-			}
-			
+			}else super.writeRequested(ctx, e);
 		}
 
 		@Override
